@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Портфолио · Артём</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Unbounded:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Unbounded', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            accent: '#fbbf24',
+            surface: '#05201f',
+            card: 'rgba(30, 41, 59, 0.6)',
+            navy: '#003153',
+            tan: '#c3b997',
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.6s ease-out forwards',
+            'float': 'float 6s ease-in-out infinite',
+            'glow': 'glow 3s ease-in-out infinite alternate',
+          },
+          keyframes: {
+            fadeIn: { '0%': { opacity: '0', transform: 'translateY(12px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+            float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-8px)' } },
+            glow: { '0%': { opacity: '0.5' }, '100%': { opacity: '1' } },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    html { scroll-behavior: smooth; background-color: #05201f; }
+    body { font-family: 'Unbounded', system-ui, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* Фон: один слой — тёмно-бирюзовый градиент + сетка (без конфликта классов) */
+    .bg-teal {
+      background-color: #05201f;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(13, 78, 78, 0.6), transparent),
+        radial-gradient(ellipse 60% 40% at 90% 60%, rgba(20, 184, 166, 0.08), transparent),
+        radial-gradient(ellipse 50% 30% at 10% 80%, rgba(6, 182, 212, 0.06), transparent),
+        linear-gradient(180deg, #05201f 0%, #0a2d2b 45%, #062826 100%);
+      background-size: 60px 60px, 60px 60px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+      background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+      background-attachment: scroll, scroll, fixed, fixed, fixed, fixed;
+    }
+
+    /* Стеклянная карточка (под тёмно-бирюзовый фон) */
+    .glass {
+      background: rgba(15, 58, 56, 0.5);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card:hover {
+      border-color: rgba(34, 211, 238, 0.3);
+      box-shadow: 0 0 40px -10px rgba(34, 211, 238, 0.12);
+      transform: translateY(-2px);
+    }
+
+    /* Градиентный текст */
+    .text-gradient {
+      background: linear-gradient(135deg, #fbbf24 0%, #c3b997 50%, #fcd34d 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Подчёркивание навигации */
+    .nav-link {
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #fbbf24, #c3b997);
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    /* Имя разработчика — мягкий контраст */
+    .name-highlight {
+      color: #b8c5d6;
+      text-shadow: none;
+    }
+
+    /* Задержки появления */
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body class="bg-teal text-slate-100 min-h-screen antialiased overflow-x-hidden">
+  <!-- Шапка -->
+  <header class="sticky top-0 z-50 glass border-b border-white/5">
+    <nav class="max-w-4xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-4">
+      <a href="#" class="text-lg font-semibold text-gradient">👋 Портфолио</a>
+      <ul class="flex flex-wrap gap-8 font-mono text-sm">
+        <li><a href="#greeting" class="nav-link text-slate-400 hover:text-tan transition">Обо мне</a></li>
+        <li><a href="#stats" class="nav-link text-slate-400 hover:text-tan transition">Статистика</a></li>
+        <li><a href="#projects" class="nav-link text-slate-400 hover:text-tan transition">Проекты</a></li>
+        <li><a href="#contacts" class="nav-link text-slate-400 hover:text-tan transition">Контакты</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Герой -->
+    <section id="greeting" class="max-w-4xl mx-auto px-4 pt-20 pb-24 md:pt-28 md:pb-32 relative">
+      <div class="absolute top-24 right-0 w-72 h-72 bg-accent/5 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+      <p class="font-mono text-accent/90 text-sm mb-4 opacity-0 animate-fade-in">Привет, мир!</p>
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 opacity-0 animate-fade-in delay-1">
+        Я <span class="text-white name-highlight">Артём</span> —<br>
+        <span class="text-gradient">начинающий разработчик</span><br>
+        <span class="text-white">с большими амбициями 🚀</span>
+      </h1>
+      <p class="text-slate-300 text-lg md:text-xl max-w-xl leading-relaxed opacity-0 animate-fade-in delay-2">
+        Делаю ботов, приложения и полезные штуки. Ниже — проекты: готовые и те, над которыми сейчас работаю.
+      </p>
+    </section>
+
+    <!-- Статистика -->
+    <section id="stats" class="max-w-4xl mx-auto px-4 py-12">
+      <h2 class="text-2xl font-semibold text-white mb-6 flex items-center gap-2">
+        <span class="text-2xl">📊</span> Статистика
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="glass glass-card rounded-2xl p-6 transition-all duration-300 group">
+          <div class="text-5xl font-mono font-bold text-gradient group-hover:scale-105 transition-transform">2</div>
+          <p class="text-slate-300 mt-2 font-mono text-sm">✅ Готово</p>
+        </div>
+        <div class="glass glass-card rounded-2xl p-6 transition-all duration-300 group">
+          <div class="text-5xl font-mono font-bold text-amber-400/90 group-hover:scale-105 transition-transform">1</div>
+          <p class="text-slate-300 mt-2 font-mono text-sm">🔨 В разработке</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Проекты -->
+    <section id="projects" class="max-w-4xl mx-auto px-4 py-12 pb-20">
+      <h2 class="text-2xl font-semibold text-white mb-8 flex items-center gap-2">
+        <span class="text-2xl">🚀</span> Проекты
+      </h2>
+      <div id="projects-list" class="grid gap-6">
+        <!-- JS -->
+      </div>
+    </section>
+
+    <!-- Контакты -->
+    <section id="contacts" class="max-w-4xl mx-auto px-4 py-16">
+      <h2 class="text-2xl font-semibold text-white mb-6 flex items-center gap-2">
+        <span class="text-2xl">📬</span> Контакты
+      </h2>
+      <div class="flex flex-wrap gap-4">
+        <a href="https://t.me/AR89MV" target="_blank" rel="noopener noreferrer"
+           class="group inline-flex items-center gap-3 glass glass-card rounded-xl px-6 py-4 transition-all duration-300 font-mono text-sm">
+          <span class="text-2xl">📱</span>
+          <span class="text-slate-300 group-hover:text-tan transition">Telegram</span>
+        </a>
+        <a href="https://github.com/arSha9889" target="_blank" rel="noopener noreferrer"
+           class="group inline-flex items-center gap-3 glass glass-card rounded-xl px-6 py-4 transition-all duration-300 font-mono text-sm">
+          <span class="text-2xl">🐙</span>
+          <span class="text-slate-300 group-hover:text-tan transition">GitHub</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Подвал -->
+  <footer class="border-t border-white/5 mt-12">
+    <div class="max-w-4xl mx-auto px-4 py-6 flex flex-wrap items-center justify-between gap-4">
+      <p class="text-slate-500 text-sm font-mono">© 2026 · Сделано с 💙</p>
+      <a href="#" class="text-slate-500 hover:text-gradient text-sm font-mono transition">Наверх ↑</a>
+    </div>
+  </footer>
+
+  <script>
+    const projects = [
+      {
+        title: 'Бот-напоминалка',
+        description: 'Telegram-бот для напоминаний с поддержкой донатов и локальной базой SQLite.',
+        tech: ['Node.js', 'Telegram API', 'SQLite', 'Донат'],
+        status: 'ready',
+        date: '13.02.2026',
+      },
+      {
+        title: 'Бот-погода',
+        description: 'Бот в Telegram, который показывает погоду по запросу через OpenWeatherMap.',
+        tech: ['Go', 'OpenWeatherMap', 'Telegram API'],
+        status: 'ready',
+        date: '15.02.2026',
+      },
+      {
+        title: 'Кнопка жизни',
+        description: 'Android-приложение для экстренной отправки SMS с геолокацией и контактами.',
+        tech: ['Android', 'Java', 'SMS'],
+        status: 'in_progress',
+        date: 'Ещё неизвестна',
+      },
+    ];
+
+    const statusLabels = {
+      ready: { text: 'Готово', emoji: '✅', class: 'text-emerald-400/90 bg-emerald-400/10 border border-emerald-400/20' },
+      in_progress: { text: 'В разработке', emoji: '🔨', class: 'text-amber-400/90 bg-amber-400/10 border border-amber-400/20' },
+    };
+
+    const container = document.getElementById('projects-list');
+    projects.forEach((p, i) => {
+      const s = statusLabels[p.status] || statusLabels.in_progress;
+      const card = document.createElement('article');
+      card.className = 'glass glass-card rounded-2xl p-6 transition-all duration-300 opacity-0 animate-fade-in';
+      card.style.animationDelay = `${0.1 * i}s`;
+      card.innerHTML = `
+        <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+          <h3 class="text-xl font-semibold text-white">${p.title}</h3>
+          <span class="font-mono text-xs px-3 py-1.5 rounded-full ${s.class}">${s.emoji} ${s.text}</span>
+        </div>
+        <p class="text-slate-300 mb-4 leading-relaxed">${p.description}</p>
+        <div class="flex flex-wrap gap-2 mb-4">
+          ${p.tech.map((t) => `<span class="font-mono text-xs bg-white/5 text-slate-300 border border-white/5 px-2.5 py-1 rounded-md">${t}</span>`).join('')}
+        </div>
+        <p class="font-mono text-sm text-slate-500">📅 ${p.date}</p>
+      `;
+      container.appendChild(card);
+    });
+  </script>
+</body>
+</html>
