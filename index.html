@@ -105,6 +105,32 @@
     .delay-2 { animation-delay: 0.2s; }
     .delay-3 { animation-delay: 0.3s; }
     .delay-4 { animation-delay: 0.4s; }
+
+    /* Модальное окно */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+    .modal-backdrop.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-backdrop.is-open .modal-content {
+      transform: scale(1);
+      opacity: 1;
+    }
+    .modal-content {
+      transform: scale(0.95);
+      opacity: 0;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
   </style>
 </head>
 <body class="bg-teal text-slate-100 min-h-screen antialiased overflow-x-hidden">
@@ -112,14 +138,47 @@
   <header class="sticky top-0 z-50 glass border-b border-white/5">
     <nav class="max-w-4xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-4">
       <a href="#" class="text-lg font-semibold text-gradient">👋 Портфолио</a>
-      <ul class="flex flex-wrap gap-8 font-mono text-sm">
+      <ul class="flex flex-wrap items-center gap-6 md:gap-8 font-mono text-sm">
         <li><a href="#greeting" class="nav-link text-slate-400 hover:text-tan transition">Обо мне</a></li>
         <li><a href="#stats" class="nav-link text-slate-400 hover:text-tan transition">Статистика</a></li>
         <li><a href="#projects" class="nav-link text-slate-400 hover:text-tan transition">Проекты</a></li>
         <li><a href="#contacts" class="nav-link text-slate-400 hover:text-tan transition">Контакты</a></li>
+        <li>
+          <button type="button" id="contact-btn" class="font-mono text-sm px-4 py-2 rounded-xl glass glass-card text-slate-300 hover:text-tan transition border border-white/10">
+            Связаться
+          </button>
+        </li>
       </ul>
     </nav>
   </header>
+
+  <!-- Модальное окно: контакты -->
+  <div id="contact-modal" class="modal-backdrop" aria-hidden="true">
+    <div class="fixed inset-0 flex items-center justify-center p-4" id="modal-overlay">
+      <div class="modal-content glass rounded-2xl border border-white/10 shadow-2xl w-full max-w-md p-6 relative" id="modal-content" role="dialog" aria-labelledby="modal-title">
+        <button type="button" id="modal-close" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition" aria-label="Закрыть">
+          <span class="text-xl leading-none">×</span>
+        </button>
+        <h2 id="modal-title" class="text-xl font-semibold text-white mb-6 pr-8">📬 Связаться</h2>
+
+        <div class="space-y-4">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-slate-400 font-mono text-sm w-20">Telegram</span>
+            <a href="https://t.me/AR89MV" target="_blank" rel="noopener noreferrer" class="text-tan hover:underline font-mono text-sm">t.me/AR89MV</a>
+            <button type="button" id="copy-telegram" class="ml-auto font-mono text-xs px-3 py-1.5 rounded-lg glass border border-white/10 text-slate-300 hover:text-tan transition">Копировать</button>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-slate-400 font-mono text-sm w-20">GitHub</span>
+            <a href="https://github.com/arSha9889" target="_blank" rel="noopener noreferrer" class="text-tan hover:underline font-mono text-sm">github.com/arSha9889</a>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-slate-400 font-mono text-sm w-20">Email</span>
+            <input type="email" placeholder="Не указан" class="flex-1 min-w-0 font-mono text-sm bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-slate-300 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50" readonly>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <main>
     <!-- Герой -->
@@ -239,6 +298,45 @@
         <p class="font-mono text-sm text-slate-500">📅 ${p.date}</p>
       `;
       container.appendChild(card);
+    });
+
+    // Модальное окно «Связаться»
+    const contactBtn = document.getElementById('contact-btn');
+    const modal = document.getElementById('contact-modal');
+    const modalClose = document.getElementById('modal-close');
+    const modalOverlay = document.getElementById('modal-overlay');
+    const modalContent = document.getElementById('modal-content');
+    const copyTelegramBtn = document.getElementById('copy-telegram');
+    const telegramUrl = 'https://t.me/AR89MV';
+
+    function openModal() {
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    contactBtn.addEventListener('click', openModal);
+    modalClose.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', function (e) {
+      if (e.target === modalOverlay || e.target === modal) closeModal();
+    });
+    modalContent.addEventListener('click', function (e) { e.stopPropagation(); });
+
+    copyTelegramBtn.addEventListener('click', function () {
+      navigator.clipboard.writeText(telegramUrl).then(function () {
+        const label = copyTelegramBtn.textContent;
+        copyTelegramBtn.textContent = 'Скопировано';
+        setTimeout(function () { copyTelegramBtn.textContent = label; }, 1500);
+      });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
     });
   </script>
 </body>
