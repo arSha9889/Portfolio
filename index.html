@@ -256,6 +256,7 @@
         title: 'Бот-напоминалка',
         description: 'Telegram-бот для напоминаний с поддержкой донатов и локальной базой SQLite.',
         tech: ['Node.js', 'Telegram API', 'SQLite', 'Донат'],
+        images: ['images/1.png', 'images/2.png'],
         status: 'ready',
         date: '13.02.2026',
       },
@@ -287,6 +288,7 @@
       card.className = 'glass glass-card rounded-2xl p-6 transition-all duration-300 opacity-0 animate-fade-in';
       card.style.animationDelay = `${0.1 * i}s`;
       card.innerHTML = `
+        ${Array.isArray(p.images) && p.images.length ? `<img src="${p.images[0]}" data-index="0" data-images='${JSON.stringify(p.images)}' alt="${p.title}" loading="lazy" class="project-image w-full rounded-xl mb-4 object-cover shadow-lg max-h-56 sm:max-h-64 cursor-pointer">` : ''}
         <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
           <h3 class="text-xl font-semibold text-white">${p.title}</h3>
           <span class="font-mono text-xs px-3 py-1.5 rounded-full ${s.class}">${s.emoji} ${s.text}</span>
@@ -298,6 +300,18 @@
         <p class="font-mono text-sm text-slate-500">📅 ${p.date}</p>
       `;
       container.appendChild(card);
+    });
+
+    // Галерея для картинок проектов (переключение по клику)
+    document.querySelectorAll('.project-image').forEach((img) => {
+      img.addEventListener('click', () => {
+        const images = JSON.parse(img.getAttribute('data-images') || '[]');
+        if (!images.length) return;
+        const currentIndex = Number(img.getAttribute('data-index') || 0);
+        const nextIndex = (currentIndex + 1) % images.length;
+        img.src = images[nextIndex];
+        img.setAttribute('data-index', String(nextIndex));
+      });
     });
 
     // Модальное окно «Связаться»
